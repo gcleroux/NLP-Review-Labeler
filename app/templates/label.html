@@ -1,5 +1,75 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<h1>Labeling the data</h1>
+
+<div class="content">
+
+  <h2>Labeling the data</h2>
+
+  <form action="/label" method="POST">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="csv_file">Select which file to label</label>
+      </div>
+      <select class="custom-select" id="csv_file" name="file_id">
+        <option selected>Choose...</option>
+        {% for csv_file in csv_files %}
+        <option value={{loop.index}}>{{csv_file.filename}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Select File</button>
+  </form>
+
+  <form action="/label-next" method="POST">
+    <div class="grid-container">
+      <div class="review-box">
+        <h4>Current Review</h4>
+          <a>
+            {% if current_review is not none %}
+              {{ current_review.body}}
+            {% endif %}
+          </a>
+    
+      </div>
+      <div class="review-check-1">
+        <h4>Topic 1</h4>
+        {% for cls in labeling_classes %}
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name={{ "rc1-" ~ loop.index }} id={{ "rc1-" ~ loop.index }} value="">
+          <label class="form-check-label" for={{ "rc1-" ~ loop.index }}>
+            {{ cls }}
+          </label>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="review-check-2">
+        <h4>Topic 2</h4>
+        {% for cls in labeling_classes %}
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name={{ "rc2-" ~ loop.index }} id={{ "rc2-" ~ loop.index }} value="">
+          <label class="form-check-label" for={{ "rc2-" ~ loop.index }}>
+            {{ cls }}
+          </label>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="review-check-3">
+        <h4>Topic 3</h4>
+        {% for cls in labeling_classes %}
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name={{ "rc3-" ~ loop.index }} id={{ "rc3-" ~ loop.index }} value="">
+          <label class="form-check-label" for={{ "rc3-" ~ loop.index }}>
+            {{ cls }}
+          </label>
+        </div>
+        {% endfor %}
+      </div>
+      <button type="submit" class="btn btn-primary next-button">Next</button>
+    </div>
+  </form>
+
+
+</div>
+
 {% endblock %}

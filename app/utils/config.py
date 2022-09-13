@@ -8,7 +8,7 @@ class DockerConfig(object):
     DEBUG = True
     TESTING = False
     SECRET_KEY = "dev"
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:password@postgres_db_container:5432/ift585'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:password@postgres_db_container:5432/nlp-review-labeler'
 
 
 class LocalConfig(object):

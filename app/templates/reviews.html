@@ -6,8 +6,8 @@
 
     <form action="/reviews" method="POST">
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="show_all" {{ "checked" if show_all == 0 }}>
-            <label class="form-check-label" for="show_all">
+            <input class="form-check-input" type="checkbox" name="show_only_labeled" value={{ show_only_labeled }} id="show_only_labeled" {{ "checked" if show_only_labeled }}>
+            <label class="form-check-label" for="show_only_labeled">
                 Show only manually labeled reviews
             </label>
         </div>
@@ -16,10 +16,10 @@
             <div class="input-group-prepend">
                 <label class="input-group-text" for="csv_file">CSV File</label>
             </div>
-            <select class="custom-select" id="csv_file">
+            <select class="custom-select" id="csv_file" name="file_id">
                 <option selected>Choose...</option>
                 {% for csv_file in csv_files %}
-                <option value={{loop.index}}>{{csv_file.filename}}</option>
+                <option value={{ loop.index }}>{{csv_file.filename}}</option>
                 {% endfor %}
             </select>
         </div>
@@ -50,7 +50,7 @@
         </thead>
         <tbody>
             {% for review in reviews %}
-            {% if show_all or review.is_labeled %}
+            {% if not show_only_labeled or review.is_labeled %}
             <tr>
                 <th scope="row">{{review.id}}</th>
                 <td>{{review.review_type}}</td>

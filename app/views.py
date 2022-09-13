@@ -9,8 +9,18 @@ from .utils.config import UPLOAD_DIR
 
 views = Blueprint('views', __name__)
 
-show_all = False
-file_id = None
+show_only_labeled = True
+
+labeling_classes = [
+    "bike",
+    "shoes",
+    "delivery",
+    "bag",
+    "stock",
+    "store"
+]
+labeling_reviews = []
+current_review = None
 
 ALLOWED_EXTENSIONS = set(["csv"])
 
@@ -24,44 +34,43 @@ def index():
 
 @views.route('/reviews', methods=['GET', 'POST'])
 def reviews():
-    global show_all, file_id
+    global show_only_labeled
     
-    # Get all reviews
-    reviews = Review.query.order_by(Review.id).all()
+    reviews = []
     
     if request.method == 'POST':
-        # Reverse the show_all
-        show_all = not show_all
+        show_only_labeled = request.form.get("show_only_labeled")
+        file_id = request.form.get("file_id")
+        reviews = Review.query.filter_by(file_id=file_id).order_by(Review.id).all()
     
     csv_files = File.query.order_by(File.id).all()
-    return render_template('reviews.html', reviews=reviews, show_all=show_all, csv_files=csv_files)
+    return render_template('reviews.html', reviews=reviews, show_only_labeled=show_only_labeled, csv_files=csv_files)
 
 @views.route('/upload', methods=['GET','POST'])
 def upload():
     if request.method == "POST":
         file = request.files["file"]
         if file and allowed_file(file.filename):
-            # Populate the review table
-            df = pd.read_csv(request.files.get('file'))
-            
-            filename = secure_filename(file.filename)
-            path = os.path.join(UPLOAD_DIR, filename)
-            df.to_csv(path)
-            
-            # Add the file to the db
-            csv_file = File(filename=filename, path=path)
-            
             try:
+                df = pd.read_csv(request.files.get('file'))
+                filename = secure_filename(file.filename)
+                path = os.path.join(UPLOAD_DIR, filename)
+                df.to_csv(path)
+                
+                # Add the file to the db
+                csv_file = File(filename=filename, path=path)
                 db.session.add(csv_file)
                 db.session.commit()
                 
+                # Populate the review table
                 populate_db(df, csv_file.id)
                 flash('File uploaded sucessfully', category='success')
             except:       
                 flash("Error while uploading file", category="error")
                 return render_template('upload.html')
-            
-        return render_template('index.html')
+        else:
+            flash("You can only upload CSV files at the moment", category="error")
+        return render_template('upload.html')
 
     return render_template('upload.html')
 
@@ -69,4 +78,16 @@ def upload():
 
 @views.route('/label', methods=['GET','POST'])
 def label():
-    return render_template('label.html')
+    global labeling_classes, labeling_reviews, current_review
+    
+    if request.method == 'POST':       
+        # Get all the reviews
+        file_id = request.form.get("file_id")
+        labeling_reviews = Review.query.filter_by(file_id=file_id).order_by(Review.id).all()
+        try:
+            current_review = labeling_reviews[0]
+        except IndexError:
+            flash("No review in this CSV file", category="error")
+    
+    csv_files = File.query.order_by(File.filename).all()
+    return render_template('label.html', csv_files=csv_files, current_review=current_review, labeling_classes=labeling_classes)
