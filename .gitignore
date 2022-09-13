@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Application input files
+app/input_files
+
+# Testing local db
+app/test.db

@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="content">
+    <h2>Showing the reviews in the database</h2>
+
+    <form action="/reviews" method="POST">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="show_all" {{ "checked" if show_all == 0 }}>
+            <label class="form-check-label" for="show_all">
+                Show only manually labeled reviews
+            </label>
+        </div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="csv_file">CSV File</label>
+            </div>
+            <select class="custom-select" id="csv_file">
+                <option selected>Choose...</option>
+                {% for csv_file in csv_files %}
+                <option value={{loop.index}}>{{csv_file.filename}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Review Type</th>
+                <th scope="col">Store Num</th>
+                <th scope="col">Store Name</th>
+                <th scope="col">Country</th>
+                <th scope="col">Language</th>
+                <th scope="col">Title</th>
+                <th scope="col">Body</th>
+                <th scope="col">Rating</th>
+                <th scope="col">Firstname</th>
+                <th scope="col">Topic 1</th>
+                <th scope="col">Topic 2</th>
+                <th scope="col">Topic 3</th>
+                <th scope="col">Source</th>
+                <th scope="col">Manually Labeled</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for review in reviews %}
+            {% if show_all or review.is_labeled %}
+            <tr>
+                <th scope="row">{{review.id}}</th>
+                <td>{{review.review_type}}</td>
+                <td>{{review.store_num}}</td>
+                <td>{{review.store_name}}</td>
+                <td>{{review.country_reference}}</td>
+                <td>{{review.language_reference}}</td>
+                <td>{{review.title}}</td>
+                <td>{{review.body}}</td>
+                <td>{{review.rating}}</td>
+                <td>{{review.firstname}}</td>
+                <td>{{review.primary_topic}}</td>
+                <td>{{review.secondary_topic}}</td>
+                <td>{{review.tertiary_topic}}</td>
+                <td>{{review.review_source}}</td>
+                <td>{{review.is_labeled}}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}
