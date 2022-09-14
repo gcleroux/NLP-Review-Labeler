@@ -130,6 +130,7 @@ dmypy.json
 
 # Application input files
 app/input_files
+app/output_files
 
 # Testing local db
 app/test.db

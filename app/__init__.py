@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from .utils.config import DockerConfig, LocalConfig, UPLOAD_DIR
+from .utils.config import SQLiteConfig, INPUT_DIR, OUTPUT_DIR
 from pathlib import Path
 
 db = SQLAlchemy()
@@ -9,16 +9,23 @@ db = SQLAlchemy()
 def create_app():
     # Init web server
     app = Flask(__name__)
-    app.config.from_object(LocalConfig())
+    app.config.from_object(SQLiteConfig())
     db.init_app(app)
 
-    # Create the input_files dir
-    Path(UPLOAD_DIR).mkdir(exist_ok=True)
+    # Create the in/out files
+    Path(INPUT_DIR).mkdir(exist_ok=True)
+    Path(OUTPUT_DIR).mkdir(exist_ok=True)
 
+    from .labels import labels
+    from .reviews import reviews
+    from .uploads import uploads
     from .views import views
 
     # Routes for REST calls
     app.register_blueprint(views, url_prefix="/")
+    app.register_blueprint(uploads, url_prefix="/")
+    app.register_blueprint(reviews, url_prefix="/")
+    app.register_blueprint(labels, url_prefix="/")
 
     # Creating the db
     from . import models
