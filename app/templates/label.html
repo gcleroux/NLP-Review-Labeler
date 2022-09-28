@@ -25,22 +25,23 @@
     <div class="grid-container">
       <div class="review-box">
         <h4>Current Review</h4>
-        <a>
-          {% if current_review is not none %}
-          {{ current_review.body}}
+        {% if current_review is not none %}
+          <h6>Title: {{ current_review.title }}</h6>
+          <h6>Rating: {{ current_review.rating }}/5</h6>
+          <a>
+            {{ current_review.body}}
+          </a>
           {% endif %}
-        </a>
-
       </div>
 
       {% for i in range(3) %}
       <div class={{ "review-check-" ~ (i+1)|string }}>
         <h4>{{ "Topic " ~ (i+1)|string }}</h4>
         {% for cls in labeling_classes %}
-        {% set topics = [current_review.primary_topic, current_review.secondary_topic, current_review.tertiary_topic] %}
+        {% set topics = [current_review.review_topic_1, current_review.review_topic_2, current_review.review_topic_3] %}
         <div class="form-check">
           <input class="form-check-input" type="radio" name={{ "topic-" ~ (i+1)|string }} id={{ "topic-" ~ (i+1)|string
-            }} value={{ cls }} {{ "checked" if topics[i]==cls }}>
+            }} value={{ cls }} {{ "checked" if "none"==cls }}>
           <label class="form-check-label" for={{ "topic-" ~ (i+1)|string }}>
             {{ cls }}
           </label>

@@ -37,7 +37,7 @@ def review_output():
         reviews = Review.query.filter_by(file_id=file_id).order_by(Review.id).all()
         
         out_df = pd.read_sql(db.session.query(Review).filter(Review.file_id == file_id).statement, db.session.bind)
-        out_df.to_csv(os.path.join(OUTPUT_DIR, filename))
+        out_df.to_csv(os.path.join(OUTPUT_DIR, filename), index=False)
         flash(f"{filename} saved succesfully", category="sucess")
     except:
         flash("Something went wrong when saving the output CSV file", category="error")

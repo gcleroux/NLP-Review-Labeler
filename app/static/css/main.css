@@ -20,3 +20,7 @@ body{
 .next-button {
     grid-column: 4;
 }
+
+input[type='radio'] { 
+    transform: scale(1.5); 
+}

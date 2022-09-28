@@ -41,12 +41,15 @@ class Review(db.Model):
     body = db.Column(db.Text)
     rating = db.Column(db.Integer)
     firstname = db.Column(db.String(100))
-    primary_topic = db.Column(db.String(100))
-    primary_metatopic = db.Column(db.String(100))
-    secondary_topic = db.Column(db.String(100))
-    secondary_metatopic = db.Column(db.String(100))
-    tertiary_topic = db.Column(db.String(100))
-    tertiary_metatopic = db.Column(db.String(100))
+      
+    review_topic_1 = db.Column(db.String(100))
+    review_topic_2 = db.Column(db.String(100))
+    review_topic_3 = db.Column(db.String(100))
+    
+    review_metatopic_1 = db.Column(db.String(100))
+    review_metatopic_2 = db.Column(db.String(100))
+    review_metatopic_3 = db.Column(db.String(100))
+    
     review_source = db.Column(db.String(100))
     is_labeled = db.Column(db.Boolean)
 
@@ -63,15 +66,16 @@ class Review(db.Model):
         body,
         rating,
         firstname,
-        primary_topic,
-        primary_metatopic,
-        secondary_topic,
-        secondary_metatopic,
-        tertiary_topic,
-        tertiary_metatopic,
+        review_topic_1,
+        review_topic_2,
+        review_topic_3,
+        review_metatopic_1,
+        review_metatopic_2,
+        review_metatopic_3,
         review_source,
         is_labeled = False
-    ):
+    ):  
+
         self.id = id
         self.file_id = file_id
         self.review_type = review_type
@@ -83,12 +87,15 @@ class Review(db.Model):
         self.body = body
         self.rating = rating
         self.firstname = firstname
-        self.primary_topic = primary_topic
-        self.primary_metatopic = primary_metatopic
-        self.secondary_topic = secondary_topic
-        self.secondary_metatopic = secondary_metatopic
-        self.tertiary_topic = tertiary_topic
-        self.tertiary_metatopic = tertiary_metatopic
+        
+        self.review_topic_1 = review_topic_1    
+        self.review_topic_2 = review_topic_2    
+        self.review_topic_3 = review_topic_3   
+         
+        self.review_metatopic_1 = review_metatopic_1    
+        self.review_metatopic_2 = review_metatopic_2    
+        self.review_metatopic_3 = review_metatopic_3
+        
         self.review_source = review_source
         self.is_labeled = is_labeled
 
@@ -114,10 +121,10 @@ def populate_db(df, file_id):
                                 row["rating"], 
                                 row["firstname"], 
                                 row["review_topic_1"], 
-                                row["review_metatopic_1"], 
                                 row["review_topic_2"], 
-                                row["review_metatopic_2"], 
                                 row["review_topic_3"], 
+                                row["review_metatopic_1"], 
+                                row["review_metatopic_2"], 
                                 row["review_metatopic_3"], 
                                 row["review_source"]
             )

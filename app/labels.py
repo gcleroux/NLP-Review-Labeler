@@ -8,22 +8,31 @@ from .utils.config import INPUT_DIR
 
 labels = Blueprint('labels', __name__)
 
+
+# New topics dict for insatisfaction
 TOPICS_DICT = {
     "bag": "Product",
     "bike": "Product",
     "boots": "Product",
     "camping": "Product",
     "checkout": "Customer_service",
+    "coats": "Product",
     "delivery": "Customer_service",
+    "fishing": "Product",
+    "food": "Product",
     "glasses": "Product",
+    "gloves": "Product",
     "helmet": "Product",
-    "negative": "Negative",
+    "kayaks": "Product",
     "none": "Other",
     "other": "Other",
     "pants": "Product",
+    "pick-up": "Customer_service",
     "positive": "Positive",
+    "pricing": "Price",
     "quality": "Quality",
     "scooter": "Product",
+    "shirts": "Product",
     "shoes": "Product",
     "size": "Size",
     "skates": "Product",
@@ -34,6 +43,41 @@ TOPICS_DICT = {
     "swimsuit": "Product",
     "website": "Tech"
 }
+
+# Old topics dict
+# TOPICS_DICT = {
+#     "bag": "Product",
+#     "bike": "Product",
+#     "boots": "Product",
+#     "camping": "Product",
+#     "checkout": "Customer_service",
+#     "delivery": "Customer_service",
+#     "fishing": "Product",
+#     "glasses": "Product",
+#     "helmet": "Product",
+#     "irrelevant": "Other",
+#     "kayaking": "Product",
+#     "mixed": "Mixed",
+#     "negative": "Negative",
+#     "none": "Other",
+#     "other": "Other",
+#     "pants": "Product",
+#     "pick-up": "Customer_service",
+#     "positive": "Positive",
+#     "pricing": "Pricing",
+#     "quality": "Quality",
+#     "scooter": "Product",
+#     "shirts": "Product",
+#     "shoes": "Product",
+#     "size": "Size",
+#     "skates": "Product",
+#     "ski": "Product",
+#     "staff": "Customer_service",
+#     "stock": "Stock",
+#     "store": "Store",
+#     "swimsuit": "Product",
+#     "website": "Tech"
+# }
 
 labeling_reviews = []
 current_review = None
@@ -68,12 +112,12 @@ def label_next():
             file_id=current_review.file_id
         ).update(
             dict(
-                primary_topic=topic_1,
-                primary_metatopic=TOPICS_DICT[topic_1],
-                secondary_topic=topic_2,
-                secondary_metatopic=TOPICS_DICT[topic_2],
-                tertiary_topic=topic_3,
-                tertiary_metatopic=TOPICS_DICT[topic_3],
+                review_topic_1=topic_1,
+                review_topic_2=topic_2,
+                review_topic_3=topic_3,
+                review_metatopic_1=TOPICS_DICT[topic_1],
+                review_metatopic_2=TOPICS_DICT[topic_2],
+                review_metatopic_3=TOPICS_DICT[topic_3],
                 is_labeled=True
             )
         )
